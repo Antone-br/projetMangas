@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Manga;
 use App\Services\MangaService;
 use App\Exceptions\UserException;
 
@@ -19,10 +20,19 @@ class MangaController  extends Controller
             }
 
             return view('listMangas', compact('mangas'));
-        } catch (\Exception $exception) {
+        } catch (UserException $exception) {
             return view('error', compact('exception'));
         }
     }
+    public function addManga()
+    {
+        try {
+            $manga = new Manga();
+            return view('formEquipe', compact('manga'));
 
+        } catch (UserException $exception) {
+            return view('error', compact('exception'));
+        }
+    }
 
 }
