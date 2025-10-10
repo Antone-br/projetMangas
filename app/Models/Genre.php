@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Manga extends Model
+class Genre extends Model
 {
-    protected $table = 'manga';
-    protected $primaryKey = 'id_manga';
+    protected $table = 'genre';
+    protected $primaryKey = 'id_genre';
     public $timestamps = false;
 }
