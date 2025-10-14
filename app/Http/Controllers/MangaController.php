@@ -51,6 +51,7 @@ class MangaController  extends Controller
         try {
             $service = new MangaService();
 
+
             $id = $request->input('id');
             if ($id) {
                 $manga = $service->getManga($id);
@@ -58,7 +59,6 @@ class MangaController  extends Controller
                 $manga = new Manga();
             }
 
-            $manga->id = $request->input('titre');
             $manga->titre = $request->input('titre');
             $manga->id_genre = $request->input('genre');
             $manga->id_dessinateur = $request->input('dess');

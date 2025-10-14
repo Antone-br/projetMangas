@@ -4,7 +4,7 @@
     <form method="POST" action="{{ url('/validManga') }}" enctype="multipart/form-data">
         {{ csrf_field() }}
 
-        <h1>@if($manga->numEqu)Modifier @else Ajout @endif d'une équipe</h1>
+        <h1>@if($manga->id_manga)Modifier @else Ajout @endif d'une équipe</h1>
         <div class="col-md-12 card card-body bg-light"></div>
 
         <div class="form-group ">
@@ -58,13 +58,12 @@
             <label class="col-md-3" for="couv">Couverture :</label>
             <div class="col-md-6">
                 <input type="hidden"name="MAX_FILE_SIZE" value="204800">
-                <input type="file" id="couv" name="couv" accept="image/*" class="form-control" required>
+                <input type="file" id="couv" name="couv" accept="image/*" class="form-control" >
             </div>
         </div>
         <input type="hidden" name="id" value="{{$manga->id_manga}}">
 
 
-        <input type="hidden" name="id" value="{{$manga->numEqu}}">
 
         <div class="form-group">
             <div class="col-md-12 col-md-offset-3">
