@@ -50,7 +50,7 @@
                 <a href="{{ route('editManga', $manga->id_manga) }}"><i class="bi bi-pencil"></i></a>
             </td>
             <td>
-                <a href="{{ route('listMangas', $manga->id_manga) }}" onclick="return confirm('Supprimer ce manga ?')">
+                <a href="{{ route('removeManga', $manga->id_manga) }}" onclick="return confirm('Supprimer ce manga ?')">
                     <i class="bi bi-trash"></i>
                 </a>
 

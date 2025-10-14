@@ -57,7 +57,19 @@ class MangaService
             $manga = Manga::query()->find($id);
             return $manga;
         } catch (QueryException $exception) {
-            $userMessage = "Impoossible de trouver l'id";
+            $userMessage = "Impossible de trouver l'id";
+            throw new UserException($userMessage, $exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function deleteManga($id)
+    {
+        try {
+            $manga = Manga::query()->find($id);
+            $manga->delete();
+
+        } catch (QueryException $exception) {
+            $userMessage = "Impossible de supprimer";
             throw new UserException($userMessage, $exception->getMessage(), $exception->getCode());
         }
     }

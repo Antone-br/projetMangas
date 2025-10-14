@@ -30,6 +30,7 @@ class MangaController  extends Controller
             return view('error', compact('exception'));
         }
     }
+
     public function addManga()
     {
         try {
@@ -46,6 +47,7 @@ class MangaController  extends Controller
             return view('error', compact('exception'));
         }
     }
+
     public function validManga(Request $request)
     {
         try {
@@ -78,7 +80,9 @@ class MangaController  extends Controller
             return view('error', compact('exception'));
         }
     }
-    public function editManga($id) {
+
+    public function editManga($id)
+    {
         try {
             $service = new MangaService();
             $serviceGenre = new GenreService();
@@ -88,16 +92,18 @@ class MangaController  extends Controller
             $dessinateurs = $serviceDessi->getListDessinateurs();
             $scenaristes = $serviceScena->getListScenaristes();
             $manga = $service->getManga($id);
-            return view('formManga', compact('manga',  'genres', 'dessinateurs', 'scenaristes'));
+            return view('formManga', compact('manga', 'genres', 'dessinateurs', 'scenaristes'));
         } catch (Exception $exception) {
             return view('error', compact('exception'));
         }
     }
+
     public function removeManga($id)
     {
         try {
-            $manga = Manga::query()->find($id);
-            $manga->delete();
+            $service = new MangaService();
+            $service->deleteManga($id);
+            return redirect(route('listMangas'));
         } catch (Exception $exception) {
             return view('error', compact('exception'));
         }

@@ -9,6 +9,6 @@ Route::get('/listerMangas', [MangaController::class,'listMangas'])->name('listMa
 Route::get('/ajouterManga', [MangaController::class, 'addManga'])->name('addManga');
 Route::post('/validManga', [MangaController::class, 'validManga'])->name('listMangas');
 Route::get('/editManga/{id}', [MangaController::class, 'editManga'])->name('editManga');
-Route::get('/suppimerManga/{id}', [MangaController::class, 'removeManga'])->name('listMangas');
+Route::get('/suppimerManga/{id}', [MangaController::class, 'removeManga'])->name('removeManga');
 
 
