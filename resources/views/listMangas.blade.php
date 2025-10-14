@@ -47,11 +47,13 @@
             </td>
 
             <td>
-                <a href="{{url('/')}}"><i class="bi bi-pencil"></i></a>
+                <a href="{{ route('editManga', $manga->id_manga) }}"><i class="bi bi-pencil"></i></a>
             </td>
             <td>
-                <a onclick="return confirm('Supprimer ce manga ?')"
-                   href="{{url('/')}}"><i class="bi bi-trash"></i></a>
+                <a href="{{ route('listMangas', $manga->id_manga) }}" onclick="return confirm('Supprimer ce manga ?')">
+                    <i class="bi bi-trash"></i>
+                </a>
+
             </td>
         </tr>
         @endforeach

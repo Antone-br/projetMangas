@@ -33,5 +33,32 @@ class MangaService
             );
         }
     }
-
+    public function saveManga(Manga $manga)
+    {
+        try {
+            $manga->save();
+        } catch (QueryException $exception) {
+            if (!$manga->id_genre) {
+                $userMessage = "Vous devez sélectionner un genre";
+            } elseif (!$manga->id_dessinateur) {
+                $userMessage = "Vous devez sélectionner un dessinateur";
+            } elseif (!$manga->id_scenariste) {
+                $userMessage = "Vous devez sélectionner un scénariste";
+            } elseif (!$manga->couverture) {
+                $userMessage = "Vous devez sélectionner une image de couverture";
+            } else {
+                $userMessage = "Impossible de mettre à jour la base de données.";
+            }
+            throw new UserException($userMessage, $exception->getMessage(), $exception->getCode());
+        }
+    }
+    public function getManga($id) {
+        try {
+            $manga = Manga::query()->find($id);
+            return $manga;
+        } catch (QueryException $exception) {
+            $userMessage = "Impoossible de trouver l'id";
+            throw new UserException($userMessage, $exception->getMessage(), $exception->getCode());
+        }
+    }
 }

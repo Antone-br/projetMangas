@@ -8,6 +8,8 @@ use App\Services\GenreService;
 use App\Services\DessinateurService;
 use App\Services\ScenaristeService;
 use Exception;
+use Illuminate\Http\Request;
+
 
 class MangaController  extends Controller
 {
@@ -48,8 +50,15 @@ class MangaController  extends Controller
     {
         try {
             $service = new MangaService();
-            $manga = new Manga();
 
+            $id = $request->input('id');
+            if ($id) {
+                $manga = $service->getManga($id);
+            } else {
+                $manga = new Manga();
+            }
+
+            $manga->id = $request->input('titre');
             $manga->titre = $request->input('titre');
             $manga->id_genre = $request->input('genre');
             $manga->id_dessinateur = $request->input('dess');
@@ -62,8 +71,33 @@ class MangaController  extends Controller
                 $couv->move(public_path('assets/images'), $manga->couverture);
             }
 
+
             $service->saveManga($manga);
             return redirect(route('listMangas'));
+        } catch (Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+    public function editManga($id) {
+        try {
+            $service = new MangaService();
+            $serviceGenre = new GenreService();
+            $serviceDessi = new DessinateurService();
+            $serviceScena = new ScenaristeService();
+            $genres = $serviceGenre->getListGenres();
+            $dessinateurs = $serviceDessi->getListDessinateurs();
+            $scenaristes = $serviceScena->getListScenaristes();
+            $manga = $service->getManga($id);
+            return view('formManga', compact('manga',  'genres', 'dessinateurs', 'scenaristes'));
+        } catch (Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+    public function removeManga($id)
+    {
+        try {
+            $manga = Manga::query()->find($id);
+            $manga->delete();
         } catch (Exception $exception) {
             return view('error', compact('exception'));
         }

@@ -1,7 +1,7 @@
 @extends("layouts.master")
 
 @section("content")
-    <form method="POST" action="{{ url('/validerManga') }}">
+    <form method="POST" action="{{ url('/validManga') }}" enctype="multipart/form-data">
         {{ csrf_field() }}
 
         <h1>@if($manga->numEqu)Modifier @else Ajout @endif d'une équipe</h1>
@@ -18,16 +18,21 @@
             <label for="genre">Genre :</label>
             <select name="genre" id="genre" class="form-select">
                 @foreach($genres as $genre)
-                    <option value="{{$genre->id_genre}}">{{$genre->lib_genre}}</option>
+                    <option value="{{ $genre->id_genre }}" @if($manga->id_genre == $genre->id_genre) selected @endif>
+                        {{ $genre->lib_genre }}
+                    </option>
                 @endforeach
             </select>
+
         </div>
 
         <div class="form-group ">
             <label for="dess">Dessinateur :</label>
             <select name="dess" id="dess" class="form-select">
                 @foreach($dessinateurs as $dessinateur)
-                    <option value="{{$dessinateur->id_dessinateur}}">{{$dessinateur->nom_dessinateur}} {{$dessinateur->prenom_dessinateur}}</option>
+                    <option value="{{$dessinateur->id_dessinateur}}" @if($manga->id_dessinateur == $dessinateur->id_dessinateur) selected @endif>
+                        {{$dessinateur->nom_dessinateur}} {{$dessinateur->prenom_dessinateur}}
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -36,20 +41,28 @@
             <label for="scen">Scenariste :</label>
             <select name="scen" id="scen" class="form-select">
                 @foreach($scenaristes as $scenariste)
-                    <option value="{{$scenariste->id_scenariste}}">{{$scenariste->nom_scenariste}} {{$scenariste->prenom_scenariste}}</option>
+                    <option value="{{$scenariste->id_scenariste}}" @if($manga->id_scenariste == $scenariste->id_scenariste) selected @endif>
+                        {{$scenariste->nom_scenariste}} {{$scenariste->prenom_scenariste}}
+                    </option>
                 @endforeach
             </select>
         </div>
 
         <div class="form-group ">
-            <label class="col-md-3 col-form-label" for="code">Titre :</label>
+            <label class="col-md-3 col-form-label" for="code">prix :</label>
             <div class="col-md-6">
                 <input type="text" id="prix" name="prix" class="form-control" value="{{ $manga->prix }}" required>
             </div>
         </div>
-
-
+        <div class="form-group ">
+            <label class="col-md-3" for="couv">Couverture :</label>
+            <div class="col-md-6">
+                <input type="hidden"name="MAX_FILE_SIZE" value="204800">
+                <input type="file" id="couv" name="couv" accept="image/*" class="form-control" required>
+            </div>
         </div>
+        <input type="hidden" name="id" value="{{$manga->id_manga}}">
+
 
         <input type="hidden" name="id" value="{{$manga->numEqu}}">
 
