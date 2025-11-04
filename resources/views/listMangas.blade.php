@@ -59,4 +59,7 @@
         @endforeach
 
     </table>
+    @if(isset($erreur))
+        <div class="alert alert-danger" role="alert">{{$erreur}}</div>
+    @endif
 @endsection

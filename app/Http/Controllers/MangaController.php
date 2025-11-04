@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Manga;
 use App\Models\Scenariste;
 use App\Services\MangaService;
@@ -9,9 +10,10 @@ use App\Services\DessinateurService;
 use App\Services\ScenaristeService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 
-class MangaController  extends Controller
+class MangaController extends Controller
 {
     public function listMangas()
     {
@@ -34,15 +36,8 @@ class MangaController  extends Controller
     public function addManga()
     {
         try {
-            $serviceGenre = new GenreService();
-            $serviceDessi = new DessinateurService();
-            $serviceScena = new ScenaristeService();
-            $genres = $serviceGenre->getListGenres();
-            $dessinateurs = $serviceDessi->getListDessinateurs();
-            $scenaristes = $serviceScena->getListScenaristes();
             $manga = new Manga();
-            return view('formManga', compact('manga', 'genres', 'dessinateurs', 'scenaristes'));
-
+            return $this->showManga($manga);
         } catch (Exception $exception) {
             return view('error', compact('exception'));
         }
@@ -51,8 +46,9 @@ class MangaController  extends Controller
     public function validManga(Request $request)
     {
         try {
-            $service = new MangaService();
 
+
+            $service = new MangaService();
 
             $id = $request->input('id');
             if ($id) {
@@ -72,7 +68,20 @@ class MangaController  extends Controller
                 $manga->couverture = $couv->getClientOriginalName();
                 $couv->move(public_path('assets/images'), $manga->couverture);
             }
-
+            try {
+                $request->validate([
+                    'titre' => ['required', 'max:250'],
+                    'genre' => ['required', 'exists:genre,id_genre'],
+                    'dess' => ['required', 'exists:dessinateur,id_dessinateur'],
+                    'scen' => ['required', 'exists:scenariste,id_scenariste'],
+                    'prix' => ['required', 'numeric', 'between:0,1000'],
+                ]);
+                if(!$manga->couverture) {
+                    throw ValidationException::withMessages(['couv' => 'Vous devez choisir une couverture']);
+                }
+            } catch (ValidationException $exception) {
+                return $this->showManga($manga)->withErrors($exception->validator);
+            }
 
             $service->saveManga($manga);
             return redirect(route('listMangas'));
@@ -85,14 +94,8 @@ class MangaController  extends Controller
     {
         try {
             $service = new MangaService();
-            $serviceGenre = new GenreService();
-            $serviceDessi = new DessinateurService();
-            $serviceScena = new ScenaristeService();
-            $genres = $serviceGenre->getListGenres();
-            $dessinateurs = $serviceDessi->getListDessinateurs();
-            $scenaristes = $serviceScena->getListScenaristes();
             $manga = $service->getManga($id);
-            return view('formManga', compact('manga', 'genres', 'dessinateurs', 'scenaristes'));
+            return $this->showManga($manga);
         } catch (Exception $exception) {
             return view('error', compact('exception'));
         }
@@ -107,6 +110,19 @@ class MangaController  extends Controller
         } catch (Exception $exception) {
             return view('error', compact('exception'));
         }
+    }
+
+    private function showManga(Manga $manga)
+    {
+
+        $serviceGenre = new GenreService();
+        $serviceDessi = new DessinateurService();
+        $serviceScena = new ScenaristeService();
+        $genres = $serviceGenre->getListGenres();
+        $dessinateurs = $serviceDessi->getListDessinateurs();
+        $scenaristes = $serviceScena->getListScenaristes();
+        return view('formManga', compact('manga', 'genres', 'dessinateurs', 'scenaristes'));
+
     }
 
 

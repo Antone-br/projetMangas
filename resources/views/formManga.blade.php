@@ -4,19 +4,20 @@
     <form method="POST" action="{{ url('/validManga') }}" enctype="multipart/form-data">
         {{ csrf_field() }}
 
-        <h1>@if($manga->id_manga)Modifier @else Ajout @endif d'une équipe</h1>
+        <h1>@if($manga->id_manga)Modifier @else Ajout @endif d'un manga</h1>
         <div class="col-md-12 card card-body bg-light"></div>
 
         <div class="form-group ">
             <label class="col-md-3 col-form-label" for="code">Titre :</label>
             <div class="col-md-6">
-                <input type="text" id="titre" name="titre" class="form-control" value="{{ $manga->titre }}" required>
+                <input type="text" id="titre" name="titre" class="form-control @error('titre') border-danger @enderror" value="{{ $manga->titre }}">
             </div>
         </div>
 
         <div class="form-group ">
             <label for="genre">Genre :</label>
-            <select name="genre" id="genre" class="form-select">
+            <select name="genre" id="genre" class="form-select @error('genre') border-danger @enderror">
+                <option value="" disabled {{ empty($manga->id_genre) ? 'selected' : '' }}>Sélectionner un genre</option>
                 @foreach($genres as $genre)
                     <option value="{{ $genre->id_genre }}" @if($manga->id_genre == $genre->id_genre) selected @endif>
                         {{ $genre->lib_genre }}
@@ -28,7 +29,8 @@
 
         <div class="form-group ">
             <label for="dess">Dessinateur :</label>
-            <select name="dess" id="dess" class="form-select">
+            <select name="dess" id="dess" class="form-select @error('dess') border-danger @enderror">
+                <option value="" disabled {{ empty($manga->id_dessinateur) ? 'selected' : '' }}>Sélectionner un dessinateur</option>
                 @foreach($dessinateurs as $dessinateur)
                     <option value="{{$dessinateur->id_dessinateur}}" @if($manga->id_dessinateur == $dessinateur->id_dessinateur) selected @endif>
                         {{$dessinateur->nom_dessinateur}} {{$dessinateur->prenom_dessinateur}}
@@ -39,7 +41,8 @@
 
         <div class="form-group ">
             <label for="scen">Scenariste :</label>
-            <select name="scen" id="scen" class="form-select">
+            <select name="scen" id="scen" class="form-select @error('scen') border-danger @enderror" >
+                <option value="" disabled {{ empty($manga->id_scenariste) ? 'selected' : '' }}>Sélectionner un scenariste</option>
                 @foreach($scenaristes as $scenariste)
                     <option value="{{$scenariste->id_scenariste}}" @if($manga->id_scenariste == $scenariste->id_scenariste) selected @endif>
                         {{$scenariste->nom_scenariste}} {{$scenariste->prenom_scenariste}}
@@ -51,7 +54,7 @@
         <div class="form-group ">
             <label class="col-md-3 col-form-label" for="code">prix :</label>
             <div class="col-md-6">
-                <input type="text" id="prix" name="prix" class="form-control" value="{{ $manga->prix }}" required>
+                <input type="text" id="prix" name="prix" class="form-control @error('prix') border-danger @enderror" value="{{ $manga->prix }}">
             </div>
         </div>
         <div class="form-group ">
@@ -77,4 +80,15 @@
             </div>
         </div>
     </form>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>
+                        {{$error}}
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 @endsection
