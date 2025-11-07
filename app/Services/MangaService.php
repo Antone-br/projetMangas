@@ -73,4 +73,32 @@ class MangaService
             throw new UserException($userMessage, $exception->getMessage(), $exception->getCode());
         }
     }
+    public function getListMangasByGenre($genreId)
+    {
+        try {
+            return Manga::query()
+                ->select([
+                    'manga.*',
+                    'genre.lib_genre',
+                    'dessinateur.nom_dessinateur',
+                    'scenariste.nom_scenariste'
+                ])
+                ->join('genre', 'genre.id_genre', '=', 'manga.id_genre')
+                ->join('dessinateur', 'dessinateur.id_dessinateur', '=', 'manga.id_dessinateur')
+                ->join('scenariste', 'scenariste.id_scenariste', '=', 'manga.id_scenariste')
+                ->where('manga.id_genre', $genreId)
+                ->get();
+        } catch (QueryException $exception) {
+            $userMessage = "Impossible d'accéder à la base de données.";
+            throw new UserException(
+                $userMessage,
+                $exception->getMessage(),
+                $exception->getCode()
+            );
+        }
+    }
+
+
+
+
 }

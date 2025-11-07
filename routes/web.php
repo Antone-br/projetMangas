@@ -11,4 +11,7 @@ Route::post('/validManga', [MangaController::class, 'validManga'])->name('listMa
 Route::get('/editManga/{id}', [MangaController::class, 'editManga'])->name('editManga');
 Route::get('/suppimerManga/{id}', [MangaController::class, 'removeManga'])->name('removeManga');
 
+Route::get('/selectGenre', [MangaController::class, 'selectGenre'])->name('selectGenre');
+Route::post('/validGenre', [MangaController::class, 'validGenre'])->name('validGenre');
+
 

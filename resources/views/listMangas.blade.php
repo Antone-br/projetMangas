@@ -3,7 +3,16 @@
 @extends('layouts.master')
 
 @section('content')
-    <h1>Liste des mangas du genre Action</h1>
+    @if(isset($titre))
+        <h1>{{ $titre }}</h1>
+    @elseif(count($mangas) === 0)
+        <h1>Aucun manga trouvé</h1>
+    @elseif($mangas->pluck('lib_genre')->unique()->count() === 1)
+        <h1>Liste des mangas du genre {{ $mangas->first()->lib_genre }}</h1>
+    @else
+        <h1>Liste de tous les mangas</h1>
+    @endif
+
     <table class="table table-bordered table-striped">
         <thead>
         <tr>

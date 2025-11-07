@@ -76,7 +76,7 @@ class MangaController extends Controller
                     'scen' => ['required', 'exists:scenariste,id_scenariste'],
                     'prix' => ['required', 'numeric', 'between:0,1000'],
                 ]);
-                if(!$manga->couverture) {
+                if (!$manga->couverture) {
                     throw ValidationException::withMessages(['couv' => 'Vous devez choisir une couverture']);
                 }
             } catch (ValidationException $exception) {
@@ -124,6 +124,47 @@ class MangaController extends Controller
         return view('formManga', compact('manga', 'genres', 'dessinateurs', 'scenaristes'));
 
     }
+
+    public function selectGenre()
+    {
+        try {
+            $serviceGenre = new GenreService();
+            $genres = $serviceGenre->getListGenres();
+            $manga = new Manga();
+
+            return view('selectGenre', compact('manga', 'genres'));
+        } catch (Exception $exception) {
+            return view('error', compact('exception'));
+        }
+
+    }
+    public function validGenre(Request $request)
+    {
+        try {
+            $genre_id = $request->input('genre');
+            $request->validate([
+                'genre' => ['required', 'exists:genre,id_genre'],
+            ]);
+
+            $serviceManga = new MangaService();
+            $mangas = $serviceManga->getListMangasByGenre($genre_id);
+
+            $serviceGenre = new GenreService();
+            $genre = $serviceGenre->getListGenres()->where('id_genre', $genre_id)->first();
+            $titre = "Liste des mangas du genre " . ($genre ? $genre->lib_genre : '');
+
+            return view('listMangas', compact('mangas', 'titre'));
+        } catch (ValidationException $exception) {
+            return redirect(route('selectGenre'))->withErrors($exception->validator);
+        } catch (Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+
+
+
+
+
 
 
 }

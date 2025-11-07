@@ -25,13 +25,13 @@
                         <a class="nav-link" href="{{ route('addManga') }}">Ajouter</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="/ajouterManga" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Lister
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('listMangas') }}">Lister Mangas</a></li>
+                            <li><a class="dropdown-item" href="{{ route('listMangas') }}">Tous</a></li>
+                            <li><a class="dropdown-item" href="{{ route('selectGenre') }}">Par genre</a></li>
                         </ul>
-
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" aria-disabled="true">Inactif</a>
